@@ -1,4 +1,4 @@
-// Récupération des produits de l'api //
+// Récupération des produits de l'api
 
 const urlApi = "http://localhost:3000/api/products"
 
@@ -8,20 +8,20 @@ fetch(urlApi)
       return res.json();
     }
   })
-  .then(function(objetProduits) {
-    console.log(objetProduits);
-    afficherProduits(objetProduits);
+  .then(function(tableauProduits) {
+    console.log(tableauProduits);
+    afficherProduits(tableauProduits);
   })
   .catch(function(err) {
     document.querySelector(".titles").innerHTML = "<h1>Erreur 404</h1>";
-    console.log("Erreur 404, sur ressource api:" + err);
-  });
+    console.log(err + " Erreur 404, la ressource api demandée n'a pas été trouvée.");
+})
 
 
-// Affichage des produits de l'api //
+// Affichage des produits de l'api
 
 function afficherProduits(element) {
-    let zoneArticle = document.querySelector("#items");
+    const zoneArticle = document.querySelector("#items");
     for (const article of element) {
       zoneArticle.innerHTML += `<a href="./product.html?id=${article._id}">
       <article>
@@ -31,4 +31,4 @@ function afficherProduits(element) {
       </article>
     </a>`;
     }
-  }
+}
