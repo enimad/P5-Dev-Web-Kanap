@@ -62,3 +62,43 @@ function afficherProduit() {
         couleurs.innerHTML += `<option value="${color}">${color}</option>`;
     }
 }
+
+
+// Récupération dynamique de la couleur
+
+const couleurEl = document.querySelector("#colors")
+
+couleurEl.addEventListener("input", (c) => {
+  article.couleur = String(c.target.value);
+  console.log(article);
+})
+
+// Récupération dynamique de la quantité
+
+const quantiteEl = document.querySelector("#quantity")
+
+quantiteEl.addEventListener("input", (q) => {
+  article.quantite = Number(q.target.value);
+  console.log(article);
+})
+
+// Création de l'objet panier et des variables de l'article du client qui le rempliront
+
+const panier = []
+const article = {
+  id : id,
+  couleur : "",
+  quantite : 0,
+}
+
+
+// Ajout et gestion du panier dans le localstorage
+
+
+const boutonAjouter = document.querySelector("#addToCart")
+
+boutonAjouter.addEventListener("click", () => {
+  panier.push(article);
+  localStorage.setItem("panier", JSON.stringify(panier));
+  console.log(localStorage);
+})
