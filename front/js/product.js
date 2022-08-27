@@ -1,16 +1,12 @@
 // Récupération de l'url
-
 const stringUrl = window.location.href
 const url = new URL(stringUrl)
 
 
 // Récupération de l'id depuis l'url
-
 const id = url.searchParams.get("id")
 
-
 // Dénomination des différents éléments du html qui seront modifiés
-
 const image = document.querySelector(".item__img")
 const nom = document.querySelector("#title")
 const prix = document.querySelector("#price")
@@ -39,7 +35,6 @@ fetch(urlApi)
 
 
 // Récupérer le produit qui a l'id de l'url
-
 let objetProduitChoisi = {}
 function choisirProduit(element) {
     for (let objetProduit of element) {
@@ -52,7 +47,6 @@ function choisirProduit(element) {
 
 
 // Modifier dynamiquement product.html afin d'afficher le produit choisi
-
 function afficherProduit() {
     image.innerHTML += `<img src="${objetProduitChoisi.imageUrl}" alt="${objetProduitChoisi.altTxt}">`;
     nom.innerHTML += `${objetProduitChoisi.name}`;
@@ -65,7 +59,6 @@ function afficherProduit() {
 
 
 // Récupération dynamique de la couleur
-
 const couleurEl = document.querySelector("#colors")
 
 couleurEl.addEventListener("input", (c) => {
@@ -74,7 +67,6 @@ couleurEl.addEventListener("input", (c) => {
 })
 
 // Récupération dynamique de la quantité
-
 const quantiteEl = document.querySelector("#quantity")
 
 quantiteEl.addEventListener("input", (q) => {
@@ -82,23 +74,53 @@ quantiteEl.addEventListener("input", (q) => {
   console.log(article);
 })
 
-// Création de l'objet panier et des variables de l'article du client qui le rempliront
+// Mise en place de l'ajout de l'article dans le panier du localstorage en cliquant sur le bouton ajouter
 
-const panier = []
+// 1-Création de l'objet article du client
 const article = {
   id : id,
   couleur : "",
   quantite : 0,
 }
 
-
-// Ajout et gestion du panier dans le localstorage
-
-
+// 2-Ajout de la dynamique du bouton ajouter
 const boutonAjouter = document.querySelector("#addToCart")
 
-boutonAjouter.addEventListener("click", () => {
-  panier.push(article);
-  localStorage.setItem("panier", JSON.stringify(panier));
-  console.log(localStorage);
-})
+boutonAjouter.addEventListener("click", ajouterArticlerAuPanier)
+
+// 3-Création de la fonction qui permet d'ajouter chaque objet article au tableau panierLS qui sera associé à la clé panier du localstorage
+function ajouterArticlerAuPanier() {
+  let panierLS = JSON.parse(localStorage.getItem("panier"))
+
+// Si le panier comporte déjà un article ou plus
+  if (panierLS) {
+
+      // Si un article du panier a le même id et la même couleur que l'article que le client souhaite ajouter ==> additionner les quantités
+      for (let i = 0; i < panierLS.length; i++){
+        if (panierLS[i].id === article.id & panierLS[i].couleur === article.couleur) {
+          panierLS[i].quantite += article.quantite;
+          localStorage.setItem("panier", JSON.stringify(panierLS));
+
+          console.log("Mise à jour de l'article");
+          console.log(panierLS);
+          return;
+        }
+      }
+      
+      // Sinon ajouter l'article au panier
+      panierLS.push(article);
+      localStorage.setItem("panier", JSON.stringify(panierLS));
+
+      console.log("Ajout d'un nouvel article");
+    }
+  
+  // Si le panier est vide
+    else {
+      panierLS = [];
+      panierLS.push(article);
+      localStorage.setItem("panier", JSON.stringify(panierLS));
+      console.log("Ajout du premier article")
+    }
+
+    console.log(panierLS);
+}
