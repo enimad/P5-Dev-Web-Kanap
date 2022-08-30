@@ -103,6 +103,7 @@ function ajouterArticlerAuPanier() {
 
           console.log("Mise à jour de l'article");
           console.log(panierLS);
+          alert("Article ajouté au panier");
           return;
         }
       }
@@ -123,4 +124,5 @@ function ajouterArticlerAuPanier() {
     }
 
     console.log(panierLS);
+    alert("Article ajouté au panier");
 }
