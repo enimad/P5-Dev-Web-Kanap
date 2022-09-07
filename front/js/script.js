@@ -9,6 +9,7 @@ fetch(urlApi)
     }
   })
   .then(function(tableauProduits) {
+    console.log("---------Chargement data API : Affichage des Kanapés---------")
     console.log(tableauProduits);
     afficherProduits(tableauProduits);
   })

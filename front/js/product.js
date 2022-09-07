@@ -25,6 +25,7 @@ fetch(urlApi)
   })
   .then(function(tableauProduits) {
     choisirProduit(tableauProduits);
+    console.log("---------Chargement du produit cliqué depuis la page Accueil : Affichage du Kanapé---------")
     console.log(objetProduitChoisi);
     afficherProduit();
   })
@@ -63,6 +64,7 @@ const couleurEl = document.querySelector("#colors")
 
 couleurEl.addEventListener("input", (c) => {
   article.couleur = String(c.target.value);
+  console.log("Modification de la couleur:");
   console.log(article);
 })
 
@@ -71,6 +73,7 @@ const quantiteEl = document.querySelector("#quantity")
 
 quantiteEl.addEventListener("input", (q) => {
   article.quantite = Number(q.target.value);
+  console.log("Modification de la quantité:");
   console.log(article);
 })
 
@@ -86,7 +89,30 @@ const article = {
 // 2-Ajout de la dynamique du bouton ajouter
 const boutonAjouter = document.querySelector("#addToCart")
 
-boutonAjouter.addEventListener("click", ajouterArticlerAuPanier)
+boutonAjouter.addEventListener("click", () => {
+  // Si le client essaye d'ajouter un article au panier sans avoir précisé de couleur, ou de quantité
+  if (article.couleur === "" && article.quantite === 0) {
+    console.log("Aucune couleur, ni aucune quantité n'a été définie.");
+    alert("Merci de définir une couleur et une quantité, aucun article n'a été ajouté au panier.");
+  }
+
+  // Si le client essaye d'ajouter un article au panier sans avoir précisé de couleur
+  else if (article.couleur === "") {
+    console.log("Aucune couleur n'a été définie.");
+    alert("Merci de définir une couleur, aucun article n'a été ajouté au panier.");
+  }
+
+  // Si le client essaye d'ajouter un article au panier sans avoir précisé de quantité
+  else if (article.quantite === 0) {
+      console.log("Aucune quantité n'a été définie.");
+      alert("Merci de définir une quantité, aucun article n'a été ajouté au panier.");
+  }
+
+  // Si le client ajoute correctement un article
+  else {
+    ajouterArticlerAuPanier();
+  }
+})
 
 // 3-Création de la fonction qui permet d'ajouter chaque objet article au tableau panierLS qui sera associé à la clé panier du localstorage
 function ajouterArticlerAuPanier() {
