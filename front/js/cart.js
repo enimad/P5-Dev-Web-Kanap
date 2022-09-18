@@ -185,7 +185,7 @@ function majQuantite(produitsApi) {
             let quantiteMaj = Number(q.target.value);
 
             // Ajout d'une fenêtre pop up si le client essaye de mettre une quantité de 0 au lieu de supprimer l'article
-            if (quantiteMaj == 0) {
+            if (quantiteMaj < 1 || quantiteMaj > 100) {
                 alert(
                   `Merci de saisir un chiffre compris entre 1 et 100, ou de cliquer sur "Supprimer" si vous souhaitez supprimer l'article du panier. -Notez que la quantité de l'article concerné a été réinitialisée-`
                 );
@@ -586,8 +586,8 @@ async function recupererOrderId() {
         console.log("Erreur!");
         console.log(e);
     }
-    commandeId = retourOrderApi.orderId
-    console.log("L'id de la commande est le suivant:")
+    commandeId = retourOrderApi.orderId;
+    console.log("L'id de la commande est le suivant:");
     console.log(commandeId);
     redirectionVersConfirmation();
 }

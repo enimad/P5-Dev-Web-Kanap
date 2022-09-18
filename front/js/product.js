@@ -103,9 +103,9 @@ boutonAjouter.addEventListener("click", () => {
   }
 
   // Si le client essaye d'ajouter un article au panier sans avoir précisé de quantité
-  else if (article.quantite === 0) {
+  else if (article.quantite < 1 || article.quantite > 100) {
       console.log("Aucune quantité n'a été définie.");
-      alert("Merci de définir une quantité, aucun article n'a été ajouté au panier.");
+      alert("Merci de définir une quantité comprise entre 1 et 100, aucun article n'a été ajouté au panier.");
   }
 
   // Si le client ajoute correctement un article
