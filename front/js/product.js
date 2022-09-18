@@ -25,13 +25,11 @@ fetch(urlApi)
   })
   .then(function(tableauProduits) {
     choisirProduit(tableauProduits);
-    console.log("---------Chargement du produit cliqué depuis la page Accueil : Affichage du Kanapé---------")
-    console.log(objetProduitChoisi);
     afficherProduit();
   })
   .catch(function(err) {
     document.querySelector(".item").innerHTML = "<h1>Erreur 404</h1>";
-    console.log(err + " Erreur 404, la ressource demandée n'a pas été trouvée.");
+    console.log(err);
 })
 
 
@@ -64,8 +62,7 @@ const couleurEl = document.querySelector("#colors")
 
 couleurEl.addEventListener("input", (c) => {
   article.couleur = String(c.target.value);
-  console.log("Modification de la couleur:");
-  console.log(article);
+
 })
 
 // Récupération dynamique de la quantité
@@ -73,8 +70,6 @@ const quantiteEl = document.querySelector("#quantity")
 
 quantiteEl.addEventListener("input", (q) => {
   article.quantite = Number(q.target.value);
-  console.log("Modification de la quantité:");
-  console.log(article);
 })
 
 // Mise en place de l'ajout de l'article dans le panier du localstorage en cliquant sur le bouton ajouter
@@ -92,19 +87,16 @@ const boutonAjouter = document.querySelector("#addToCart")
 boutonAjouter.addEventListener("click", () => {
   // Si le client essaye d'ajouter un article au panier sans avoir précisé de couleur, ou de quantité
   if (article.couleur === "" && article.quantite === 0) {
-    console.log("Aucune couleur, ni aucune quantité n'a été définie.");
     alert("Merci de définir une couleur et une quantité, aucun article n'a été ajouté au panier.");
   }
 
   // Si le client essaye d'ajouter un article au panier sans avoir précisé de couleur
   else if (article.couleur === "") {
-    console.log("Aucune couleur n'a été définie.");
     alert("Merci de définir une couleur, aucun article n'a été ajouté au panier.");
   }
 
   // Si le client essaye d'ajouter un article au panier sans avoir précisé de quantité
   else if (article.quantite < 1 || article.quantite > 100) {
-      console.log("Aucune quantité n'a été définie.");
       alert("Merci de définir une quantité comprise entre 1 et 100, aucun article n'a été ajouté au panier.");
   }
 
@@ -127,8 +119,6 @@ function ajouterArticlerAuPanier() {
           panierLS[i].quantite += article.quantite;
           localStorage.setItem("panier", JSON.stringify(panierLS));
 
-          console.log("Mise à jour de l'article");
-          console.log(panierLS);
           alert("Article ajouté au panier");
           return;
         }
@@ -137,8 +127,6 @@ function ajouterArticlerAuPanier() {
       // Sinon ajouter l'article au panier
       panierLS.push(article);
       localStorage.setItem("panier", JSON.stringify(panierLS));
-
-      console.log("Ajout d'un nouvel article");
     }
   
   // Si le panier est vide
@@ -146,9 +134,7 @@ function ajouterArticlerAuPanier() {
       panierLS = [];
       panierLS.push(article);
       localStorage.setItem("panier", JSON.stringify(panierLS));
-      console.log("Ajout du premier article")
     }
 
-    console.log(panierLS);
     alert("Article ajouté au panier");
 }

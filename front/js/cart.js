@@ -1,8 +1,3 @@
-// Simplification du console.log
-function log(p){
-    console.log(p);
-}
-
 // Récupérer le panier du localStorage
 let panierLS = JSON.parse(localStorage.getItem("panier"))
 
@@ -26,38 +21,26 @@ async function appelApi() {
 
 // Fonction qui se lance au chargement de la page en async/ await apres avoir récupéré les produits api
 document.addEventListener("DOMContentLoaded", async() => {
-    log("---------Arrivée sur la page du panier : chargement du panier---------")
-
     let produitsApi = [];
 
     // Si aucun produit n'a été ajouté au panier
     if (panierLS === null || panierLS === undefined) {
-        log("-Le panier est vide-");
-        log(panierLS);
         afficherPanierVide();
     }
 
     else if (panierLS.length === 0) {
-        log("-Le panier est vide-");
-        log(panierLS);
         afficherPanierVide();
     }
 
     // Si des produits ont été ajoutés au panier
     else {
-        log("-Le panier contient des produits-");
-        log(panierLS);
         // Récupérer les produits de l'api
         try {
             produitsApi = await appelApi();
         }
         catch (e) {
-            log("Erreur!");
-            log(e);
+            console.log(e);
         }
-        log("Produits de l'api chargés:")
-        log(produitsApi);
-
 
         // // Compléter le panierLS
         remplirPanierLS(produitsApi);
@@ -73,9 +56,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
         // Calculs Quantité et Prix Total
         calculQuantiteTotal(panierLS);
-        // log("La quantité totale d'articles: " + quantiteFinale);
         calculPrixTotal(panierLS);
-        // log("Le prix total: " + prixFinal);
 
         // Afficher le QP Total
         afficherQPTotal();
@@ -92,15 +73,6 @@ document.addEventListener("DOMContentLoaded", async() => {
         // Suppression des éléments non souhaités dans le local storage, puis rajout de tous les éléments du panierLS afin de permettre le bon affichage des produits
         suppressionPriceLS();
         remplirPanierLS(produitsApi);
-
-        // Ajout de logs dans la console permettant de voir le bilan des paniers
-        log("******************* BILAN *******************")
-        log("panierLS:")
-        log(panierLS);
-        log("panierLSFinal:");
-        log(panierLSFinal);
-        log("localstorage:")
-        log(JSON.parse(localStorage.getItem("panier")));
     }
 })
 
@@ -110,9 +82,6 @@ function remplirPanierLS(produitsApi) {
         let produitPanierId = panierLS[i].id;
         for (const p of produitsApi) {
             if (p._id === produitPanierId) {
-                // log("////Comparaison: Produit du panier - Produit de l'api////")
-                // log(`Produit ${[i+1]} du panier - ID: ` + produitPanierId)
-                // log(`Produit de l'api - ID: ` + p._id);
                 panierLS[i].imageUrl = p.imageUrl;
                 panierLS[i].altTxt = p.altTxt;
                 panierLS[i].name = p.name;
@@ -179,9 +148,6 @@ function majQuantite(produitsApi) {
     // Ajout d'un évènement sur toute modification de l'input quantité d'article
     produitMaj.forEach((produitMaj) => {
         produitMaj.addEventListener("change", (q) => {
-
-            log("---------Changement de la quantité d'un article du panier: MAJ du panier---------")
-
             let quantiteMaj = Number(q.target.value);
 
             // Ajout d'une fenêtre pop up si le client essaye de mettre une quantité de 0 au lieu de supprimer l'article
@@ -193,12 +159,6 @@ function majQuantite(produitsApi) {
                 quantiteMaj = 1;
                 window.location.href = "cart.html";
             }
-
-            log("-Caractéristiques de l'article maj-")
-
-            log(`Id: ${produitMaj.dataset.id} - Couleur: ${produitMaj.dataset.color} - Quantité maj: ${quantiteMaj}`);
-
-
             // Modification dynamique de la quantité du produit du panier affichée et de la quantité stockée dans le localstorage
             for (const article of panierLS){
                 if (article.id === produitMaj.dataset.id && article.couleur === produitMaj.dataset.color) {
@@ -207,7 +167,6 @@ function majQuantite(produitsApi) {
                 localStorage.setItem("panier", JSON.stringify(panierLS));
                 }
             }
-
             // Maj dynamique du total du panier affiché
             calculQuantiteTotalMaj(panierLS);
             calculPrixTotalMaj(panierLS);
@@ -255,21 +214,15 @@ function supprimerArticle() {
     for (const btn of supprimerBtn) {
         // Ajout d'un évènement sur clique sur le bouton supprimer en dessous des articles
         btn.addEventListener("click", () =>{
-            log("******************* Suppression d'un article *******************")
-
             // On récupère la partie du html à supprimer lorsqu'on clique sur supprimer
             const articleASupprimer = btn.closest('article');
             
-            // On compare la partie html concernée par le clique sur le bouton supprimé avec les éléments du panier à afficher, lorsqu'on a notre article on le supprime du panier et on maj le localstorage, enfin on log dans la console l'article qui a été supprimé et le panier maj
+            // On compare la partie html concernée par le clique sur le bouton supprimé avec les éléments du panier à afficher, lorsqu'on a notre article on le supprime du panier et on maj le localstorage
             for (const article of panierLS){
                 if (articleASupprimer.dataset.id === article.id && articleASupprimer.dataset.color === article.couleur) {
                     panierLS = panierLS.filter((el) => el !== article)
                     localStorage.setItem("panier", JSON.stringify(panierLS));
                     panierLS = JSON.parse(localStorage.getItem("panier"));
-                    log("Article Supprimé");
-                    log(`Id de l'article: ${articleASupprimer.dataset.id} - Couleur de l'article: ${articleASupprimer.dataset.color}`);
-                    log("Panier MAJ après suppression de l'article:");
-                    log(panierLS);
                 }
             }
 
@@ -306,7 +259,6 @@ function calculQuantiteTotalMaj(panier) {
     for (const article of panier) {
         quantiteFinaleMaj += article.quantite;
     }
-    log("Quantité finale maj: " + quantiteFinaleMaj);
 };
 
 function calculPrixTotalMaj(panier) {
@@ -314,13 +266,11 @@ function calculPrixTotalMaj(panier) {
     for (const article of panier) {
         prixFinalMaj += article.price * article.quantite;
     }
-    log("Prix final maj: " + prixFinalMaj);
 };
 
 function afficherQPTotalMaj() {
     quantiteTotal.innerHTML = `${quantiteFinaleMaj}`;
     prixTotal.innerHTML = `${prixFinalMaj},00`;
-    log("Affichage du QPTotalMaj");
 }
 
 // Fonction qui permet de supprimer un article du panierLS
@@ -344,28 +294,20 @@ let panierLSFinal = []
 // Fonction qui remplit le nouveau panier avec les articles du panierLS
 function remplirPanierLSFinal() {
     panierLSFinal = panierLS;
-    // log("Voila le panierLSFinal rempli:");
-    // log(panierLSFinal);
 }
 
 // Fonction qui supprime les éléments non désirés du localStorage
 function suppressionPriceLS() {
-    // log("Voila le PLSF après suppression:");
     for (let i = 0; i < panierLSFinal.length; i++) {
         // Pour chaque article du nouveau panier final: on supprime les éléments de prix, de nom et d'image
         delete panierLSFinal[i].price;
         delete panierLSFinal[i].imageUrl;
         delete panierLSFinal[i].altTxt;
         delete panierLSFinal[i].name;
-        // log("PLSF maj:");
-        // log(panierLSFinal[i]);
 
         // On met à jour le localstorage avec ce nouveau panier final afin de ne garder que les données d'id, de couleur et de quantité
         localStorage.setItem("panier", JSON.stringify(panierLSFinal));
         let panierFinal = JSON.parse(localStorage.getItem("panier"));
-        // Enfin on log le local storage final 
-        // log("LocalStorage:")
-        // log(panierFinal);
     };
 }
 
@@ -420,18 +362,15 @@ function analyseInput(input, value, regex, erreurInput, erreurMessage) {
         // Si le texte renseigné ne match pas avec la regex, on désactive le bouton commander   
         if (regex.test(value) === false) {
             btnCommander.disabled = true;
-            log("Le bouton Commander est désactivé");
             // On indique un message d'erreur
             erreurInput.innerHTML = `Le champ de saisie ne peut contenir que ${erreurMessage}`;
             // On s'assure qu'il n'y a plus d'erreur avant de réactiver le bouton commander, sinon on le garde désactivé
             for (i = 0; i < allErrorMsgArray.length; i++) {
                 if (allErrorMsgArray[i].innerHTML === undefined || allErrorMsgArray[i].innerHTML === "") {
                     btnCommander.disabled = false;
-                    log("C'est tout bon !")
                 }
                 else {
                     btnCommander.disabled = true;
-                    log("Le bouton Commander est désactivé car il existe encore une erreur dans le formulaire");
                     break;
                 }
             }
@@ -439,17 +378,14 @@ function analyseInput(input, value, regex, erreurInput, erreurMessage) {
         // Sinon on (ré)active le bouton commander 
         else if (regex.test(value) === true) {
             btnCommander.disabled = false;
-            log("Le bouton Commander est actif");
             erreurInput.innerHTML = "";
             // On s'assure qu'il n'y a plus d'erreur avant de réactiver le bouton commander, sinon on le garde désactivé
             for (i = 0; i < allErrorMsgArray.length; i++) {
                 if (allErrorMsgArray[i].innerHTML === undefined || allErrorMsgArray[i].innerHTML === "") {
                     btnCommander.disabled = false;
-                    log("C'est tout bon !")
                 }
                 else {
                     btnCommander.disabled = true;
-                    log("Le bouton Commander est désactivé car il existe encore une erreur dans le formulaire");
                     break;
                 }
             }
@@ -527,10 +463,6 @@ function validationTypesId() {
         // produitsId[3] = 15;
         // Number(produitsId[3]);
         if (typeof produitsId[i] === "string") {
-            log(produitsId[i]);
-            log(typeof produitsId[i]);
-            log("Cet id est bien de type 'string'");
-            log("--------------------------------");
         }
         else {
             return false;
@@ -546,10 +478,6 @@ function validationTypesContact() {
     // Number(tableauValeursContact[3]);
     for (let i = 0; i < tableauValeursContact.length; i++) {
         if (typeof tableauValeursContact[i] === "string") {
-            log(tableauValeursContact[i]);
-            log(typeof tableauValeursContact[i]);
-            log("Cette valeur de l'objet contact est bien de type 'string'");
-            log("---------------------------------------------------------");
         }
         else {
             return false;
@@ -583,12 +511,9 @@ async function recupererOrderId() {
         retourOrderApi = await appelApiPost();
     }
     catch (e) {
-        console.log("Erreur!");
         console.log(e);
     }
     commandeId = retourOrderApi.orderId;
-    console.log("L'id de la commande est le suivant:");
-    console.log(commandeId);
     redirectionVersConfirmation();
 }
 
@@ -613,7 +538,6 @@ btnCommander.addEventListener("click", (f) => {
     let validiteFormulaire = document.querySelector(".cart__order__form").checkValidity();
     if(!validiteFormulaire) {
         document.querySelector(".cart__order__form").reportValidity();
-        log("Le formulaire n'est pas correctement complété");
     } else {
         if (panierLS === null || panierLS === undefined) {
             alert("Merci de remplir votre panier afin de pouvoir passer commande");
@@ -623,11 +547,7 @@ btnCommander.addEventListener("click", (f) => {
         }
         else {
             ficheContact(prenomEl, nomEl, adresseEl, villeEl, emailEl);
-            log("Voici la fiche contact:");
-            log(contactFiche);
             produitsCommande();
-            log("Voici le tableau des Id des articles commandés:");
-            log(produitsId);
             commandeApi();
         }
     }
@@ -636,5 +556,4 @@ btnCommander.addEventListener("click", (f) => {
 // Fonction qui permet d'envoyer le client vers la page de confirmation de commande
 function redirectionVersConfirmation() {
     document.location.href = "./confirmation.html?orderId=" + commandeId;
-    log("----------- Redirection vers la page de confirmation de commande -----------")
 }

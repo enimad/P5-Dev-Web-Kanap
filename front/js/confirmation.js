@@ -16,7 +16,6 @@ function affichageCommandeId() {
     // On s'assure que le client a été redirigé ici en cliquant sur le bouton Commander en vérifiant qu'il y a bien un orderId
     if (commandeId) {
         // On affiche le numéro de commande et on vide le LS
-        console.log("Confirmation de commande !")
         orderIdEl.innerHTML = commandeId;
         localStorage.clear();
     }

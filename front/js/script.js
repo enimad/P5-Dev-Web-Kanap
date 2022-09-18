@@ -9,13 +9,11 @@ fetch(urlApi)
     }
   })
   .then(function(tableauProduits) {
-    console.log("---------Chargement data API : Affichage des Kanapés---------")
-    console.log(tableauProduits);
     afficherProduits(tableauProduits);
   })
   .catch(function(err) {
     document.querySelector(".titles").innerHTML = "<h1>Erreur 404</h1>";
-    console.log(err + " Erreur 404, la ressource api demandée n'a pas été trouvée.");
+    console.log(err);
 })
 
 
