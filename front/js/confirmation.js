@@ -21,7 +21,7 @@ function affichageCommandeId() {
     }
     // Si le client est arrivé ici sans avoir cliqué sur le bouton btnCommander, on l'avertit qu'ill faut passer par la page panier où il devra logiquement appuyer sur le bouton Commander + on le redirige vers la page d'accueil
     else {
-        alert("Merci de remplir votre panier afin de pouvoir passer commande");
+        alert("Merci de remplir votre panier et/ ou de passer la commande depuis la page panier afin que votre commande soit bien traitée");
         document.location.href = "./index.html";
     }
 }
